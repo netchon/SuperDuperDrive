@@ -1,5 +1,8 @@
 package com.udacity.jwdnd.course1.cloudstorage.model;
 
+import com.udacity.jwdnd.course1.cloudstorage.services.EncryptionService;
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class Credential {
 
     private Integer credentialId;
@@ -7,15 +10,18 @@ public class Credential {
     private String username;
     private String key;
     private String password;
-    private User user;
+    private Integer userId;
 
-    public Credential(Integer credentialId, String url, String username, String key, String password, User user) {
+    @Autowired
+    private EncryptionService encryptionService;
+
+    public Credential(Integer credentialId, String url, String username, String key, String password, Integer userId) {
         this.credentialId = credentialId;
         this.url = url;
         this.username = username;
         this.key = key;
         this.password = password;
-        this.user = user;
+        this.userId = userId;
     }
 
     public Integer getCredentialId() {
@@ -58,11 +64,15 @@ public class Credential {
         this.password = password;
     }
 
-    public User getUser() {
-        return user;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
+
+    public String decryptPassword(Credential credential){
+        return this.encryptionService.decryptValue(credential.getPassword(), credential.getKey());
     }
 }
