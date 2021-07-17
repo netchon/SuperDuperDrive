@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NoteService {
@@ -20,6 +21,10 @@ public class NoteService {
     }
 
     public int createNote(Note note){
+        boolean result = checkIfNoteAlreadyExist(note);
+        if(result)
+            return -1;
+
         return noteMapper.insertNote(note);
     }
 
@@ -33,6 +38,16 @@ public class NoteService {
 
     public void deleteNoteByNoteId(int noteId){
         noteMapper.deleteNoteById(noteId);
+    }
+
+    private boolean checkIfNoteAlreadyExist(Note n){
+        Optional<Note> note = Optional.ofNullable(noteMapper.getNoteByTitle(n.getNoteTitle()));
+        if(note.isPresent()){
+            if(note.get().getNoteDescription().equals(n.getNoteDescription()))
+                return true;
+        }
+
+        return false;
     }
 
 }

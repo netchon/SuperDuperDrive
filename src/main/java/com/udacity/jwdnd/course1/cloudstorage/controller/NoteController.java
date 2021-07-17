@@ -28,13 +28,18 @@ public class NoteController {
         note.setUserId(userService.getUserIdByUserName(authentication.getName()));
         try {
             if(note.getNoteId() == null){
-                noteService.createNote(note);
-                model.addAttribute("success", true);
-                model.addAttribute("message", "Note inserted successfully");
+                int result = noteService.createNote(note);
+                if(result == -1){
+                    model.addAttribute("error", true);
+                    model.addAttribute("message", "Note already available");
+                }else{
+                    model.addAttribute("success", true);
+                    model.addAttribute("message", "Note inserted successfully");
+                }
             }else{
-                noteService.updateNote(note);
-                model.addAttribute("success", true);
-                model.addAttribute("message", "Note updated successfully");
+                    noteService.updateNote(note);
+                    model.addAttribute("success", true);
+                    model.addAttribute("message", "Note updated successfully");
             }
 
         }catch(Exception e){

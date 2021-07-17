@@ -22,6 +22,10 @@ public interface NoteMapper {
     @Select("SELECT * FROM NOTES WHERE userId=#{userId}")
     List<Note> getAllNotesByUserId(int userId);
 
+    @Select("SELECT * FROM NOTES WHERE noteTitle=#{noteTitle}")
+    Note getNoteByTitle(String noteTitle);
+
+
     @Delete("DELETE FROM NOTES WHERE noteId=#{noteId}")
     void deleteNoteById(int noteId);
 }

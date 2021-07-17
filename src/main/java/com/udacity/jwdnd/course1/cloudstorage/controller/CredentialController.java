@@ -35,9 +35,14 @@ public class CredentialController {
         credential.setUserId(userService.getUserIdByUserName(authentication.getName()));
         try{
             if(credential.getCredentialId() == null) {
-                credentialService.saveCredential(credential);
-                model.addAttribute("success", true);
-                model.addAttribute("message", "credential saved successfully");
+                int result = credentialService.saveCredential(credential);
+                if(result == -1){
+                    model.addAttribute("error", true);
+                    model.addAttribute("message", "user already available");
+                }else {
+                    model.addAttribute("success", true);
+                    model.addAttribute("message", "credential saved successfully");
+                }
             }else{
                 credentialService.updateCredential(credential);
                 model.addAttribute("success", true);
